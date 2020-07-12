@@ -32,4 +32,14 @@ app.post(
   signup
 );
 
+//login
+app.post(
+  "/login",
+  [
+    check("email", "enter valid email").isEmail(),
+    check("password", "password is required").exists(),
+  ],
+  login
+);
+
 exports.api = functions.region("europe-west3").https.onRequest(app);
