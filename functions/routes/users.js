@@ -22,7 +22,7 @@ exports.signup = (req, res) => {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  const { email, password, confirmPassword } = req.bod;
+  const { email, password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
     return res.status(422).json({ error: "passwords must match" });
