@@ -54,3 +54,29 @@ exports.signup = (req, res) => {
     .then(() => res.status(201).json({ token }))
     .catch((error) => res.json({ error }));
 };
+
+exports.login = (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  const { email, password } = req.body;
+
+  let token = "";
+
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((data) => {
+      return data.user.getIdToken();
+    })
+    .then((_token) =>
+      res.status(200).json({
+        token,
+        email,
+      })
+    )
+    .catch((error) => res.status(500).json(error));
+};

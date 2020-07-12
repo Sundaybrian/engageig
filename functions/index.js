@@ -10,7 +10,7 @@ const { check } = require("express-validator");
 
 // handlers imports
 
-const { signup } = require("./routes/users");
+const { signup, login } = require("./routes/users");
 // const auth = require("./utils/auth");
 
 //===================== cases roures=======================//
