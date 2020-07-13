@@ -14,9 +14,14 @@ dotenv.config();
 // app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // handlers imports
+const { getAllCases, postOneCase } = require("./routes/cases");
 const { signup, login } = require("./routes/users");
 
 //===================== cases routes=======================//
+
+// TODO:add middleware for admin only
+app.get("/getAllCases", getAllCases);
+app.post("/postOneCase", FBAuth, postOneCase);
 
 //===================== signup routes =======================//
 // signup
