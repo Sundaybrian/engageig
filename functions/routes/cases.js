@@ -32,4 +32,25 @@ exports.getAllCases = (req, res) => {
     .catch((error) => res.status(500).json(error));
 };
 
-exports.postOneCase = (req, res) => {};
+exports.postOneCase = (req, res) => {
+  const { phoneNumber, obNumber, description, policeStation } = req.body;
+
+  const newCase = {
+    email: req.user.email,
+    userId: req.user.user_id,
+    phoneNumber,
+    obNumber,
+    description,
+    policeStation,
+    creaateAt: new Date().toISOString(),
+    status: pending,
+  };
+
+  // persist case to db
+  db.collection("cases")
+    .add(newCase)
+    .then((doc) => {
+      return res.status(201).json({ ...newCase, id: doc.id });
+    })
+    .catch((error) => res.status(500).json(error));
+};
