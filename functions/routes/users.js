@@ -89,3 +89,31 @@ exports.login = (req, res) => {
       return res.status(500).json(error);
     });
 };
+
+exports.getAuthenticatedUser = (req, res) => {
+  let userDetails = {};
+
+  db.doc(`/users/${req.user.email}`)
+    .get()
+    .then((userDoc) => {
+      if (userDoc.exists) {
+        userDetails.credentials = doc.data(); // populate user details
+
+        // fetch their cases
+        return db
+          .collection("cases")
+          .where("email", "==", req.user.email)
+          .get();
+      }
+    })
+    .then((data) => {
+      userDetails.cases = [];
+
+      data.forEach((doc) => {
+        userDetails.cases.push({ id: doc.id, ...doc.data() });
+      });
+
+      return res.status(200).json(userDetails);
+    })
+    .catch((error) => res.status(500).json(error));
+};
