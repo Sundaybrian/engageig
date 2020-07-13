@@ -97,7 +97,7 @@ exports.getAuthenticatedUser = (req, res) => {
     .get()
     .then((userDoc) => {
       if (userDoc.exists) {
-        userDetails.credentials = doc.data(); // populate user details
+        userDetails.credentials = userDoc.data(); // populate user details
 
         // fetch their cases
         return db
@@ -115,5 +115,8 @@ exports.getAuthenticatedUser = (req, res) => {
 
       return res.status(200).json(userDetails);
     })
-    .catch((error) => res.status(500).json(error));
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).json({ error: "internal server error" });
+    });
 };
