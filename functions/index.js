@@ -15,7 +15,7 @@ dotenv.config();
 
 // handlers imports
 const { getAllCases, postOneCase } = require("./routes/cases");
-const { signup, login } = require("./routes/users");
+const { signup, login, getAuthenticatedUser } = require("./routes/users");
 
 //===================== cases routes=======================//
 
@@ -59,5 +59,7 @@ app.post(
   ],
   login
 );
+
+app.get("/user/getAuthenticatedUser", FBAuth, getAuthenticatedUser);
 
 exports.api = functions.region("europe-west3").https.onRequest(app);
