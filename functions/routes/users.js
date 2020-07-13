@@ -49,6 +49,7 @@ exports.signup = (req, res) => {
         email,
         userId,
         createdAt: new Date().toISOString(),
+        isAdmin: false,
       });
     })
     .then(() => res.status(201).json({ token }))
@@ -72,11 +73,19 @@ exports.login = (req, res) => {
     .then((data) => {
       return data.user.getIdToken();
     })
-    .then((_token) =>
-      res.status(200).json({
+    .then((_token) => {
+      token = _token;
+      return res.status(200).json({
         token,
         email,
-      })
-    )
-    .catch((error) => res.status(500).json(error));
+      });
+    })
+    .catch((error) => {
+      if (error.code == "auth/wrong-password") {
+        return res
+          .status(403)
+          .json({ error: "wrong credentials, please try again" });
+      }
+      return res.status(500).json(error);
+    });
 };

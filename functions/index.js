@@ -3,20 +3,22 @@ const functions = require("firebase-functions");
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
+const { check } = require("express-validator");
+const FBAuth = require("./utils/auth");
 
 dotenv.config();
 
-const { check } = require("express-validator");
+// const swaggerUi = require("swagger-ui-express");
+// const swaggerDocument = require("./swagger.json");
+
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // handlers imports
-
 const { signup, login } = require("./routes/users");
-// const auth = require("./utils/auth");
 
-//===================== cases roures=======================//
+//===================== cases routes=======================//
 
 //===================== signup routes =======================//
-
 // signup
 app.post(
   "/signup",
