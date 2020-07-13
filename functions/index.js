@@ -21,7 +21,18 @@ const { signup, login } = require("./routes/users");
 
 // TODO:add middleware for admin only
 app.get("/getAllCases", getAllCases);
-app.post("/postOneCase", FBAuth, postOneCase);
+app.post(
+  "/postOneCase",
+  [
+    FBAuth,
+    [
+      check("phoneNumber", "phoneNumber is required").not().isEmpty(),
+      check("obNumber", "obNumber is required").not().isEmpty(),
+      check("policeStation", "please provide a police station").not().isEmpty(),
+    ],
+  ],
+  postOneCase
+);
 
 //===================== signup routes =======================//
 // signup

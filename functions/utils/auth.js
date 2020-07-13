@@ -1,15 +1,11 @@
 const { admin } = require("../utils/admin");
 
 const FBAuth = (req, res, next) => {
-  let idToken;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer ")
-  ) {
-    idToken = req.headers.authorization.split("Bearer ")[1];
-  } else {
+  let idToken = req.header("auth-token");
+
+  if (!idToken) {
     console.error("no token found");
-    return res.status(403).json({ error: "Unauthorized" });
+    return res.status(403).json({ error: "No token found,Unauthorized" });
   }
 
   // verify token

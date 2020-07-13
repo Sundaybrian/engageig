@@ -1,17 +1,5 @@
 const { db } = require("../utils/admin");
-const firebase = require("firebase");
 const { validationResult } = require("express-validator");
-
-firebase.initializeApp({
-  apiKey: process.env.apiKey,
-  authDomain: process.env.authDomain,
-  databaseURL: process.env.databaseURL,
-  projectId: process.env.projectId,
-  storageBucket: process.env.storageBucket,
-  messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId,
-  measurementId: process.env.measurementId,
-});
 
 exports.getAllCases = (req, res) => {
   db.collection("cases")
@@ -33,7 +21,18 @@ exports.getAllCases = (req, res) => {
 };
 
 exports.postOneCase = (req, res) => {
-  const { phoneNumber, obNumber, description, policeStation } = req.body;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  const {
+    phoneNumber,
+    obNumber,
+    description = "not provided",
+    policeStation,
+  } = req.body;
 
   const newCase = {
     email: req.user.email,
@@ -42,8 +41,8 @@ exports.postOneCase = (req, res) => {
     obNumber,
     description,
     policeStation,
-    creaateAt: new Date().toISOString(),
-    status: pending,
+    createdAt: new Date().toISOString(),
+    status: "pending",
   };
 
   // persist case to db
