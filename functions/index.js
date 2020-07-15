@@ -8,31 +8,6 @@ const FBAuth = require("./utils/auth");
 
 dotenv.config();
 
-const swaggerUi = require("swagger-ui-express");
-const swaggerJsDoc = require("swagger-jsdoc");
-
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      title: "Engage ig api",
-      description: "Api for engage ig",
-      contact: {
-        name: "Sunday Brian",
-      },
-    },
-    servers: [
-      {
-        url: "http://localhost:5000/engageig-4f957/europe-west3/api/",
-      },
-    ],
-  },
-  apis: ["index.js"],
-};
-
-const swaggerDocument = swaggerJsDoc(swaggerOptions);
-app.use("/docs", swaggerUi.serve);
-app.get("/docs", swaggerUi.setup(swaggerDocument, { explorer: true }));
-
 // handlers imports
 const { getAllCases, postOneCase } = require("./routes/cases");
 const { signup, login, getAuthenticatedUser } = require("./routes/users");
