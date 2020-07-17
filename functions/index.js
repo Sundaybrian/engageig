@@ -20,12 +20,12 @@ app.get("/getAllCases", getAllCases);
 app.post(
   "/postOneCase",
   [
-    FBAuth,
     [
       check("phoneNumber", "phoneNumber is required").not().isEmpty(),
       check("obNumber", "obNumber is required").not().isEmpty(),
       check("policeStation", "please provide a police station").not().isEmpty(),
     ],
+    FBAuth,
   ],
   postOneCase
 );
@@ -39,9 +39,7 @@ app.post(
     check("password", "enter password with 8 or more characters")
       .exists()
       .isLength({ min: 8, max: 255 }),
-    check("confirmPassword", "password length must be 8 characters or more")
-      .exists()
-      .isLength({ min: 8, max: 255 }),
+    check("phoneNumber", "please provide a phonenumber").exists(),
   ],
   signup
 );

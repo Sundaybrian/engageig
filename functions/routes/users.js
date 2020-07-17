@@ -22,11 +22,7 @@ exports.signup = (req, res) => {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  const { email, password, confirmPassword } = req.body;
-
-  if (password !== confirmPassword) {
-    return res.status(422).json({ error: "passwords must match" });
-  }
+  const { email, password, phoneNumber } = req.body;
 
   let userId = "";
   let token = "";
@@ -48,6 +44,7 @@ exports.signup = (req, res) => {
       return db.doc(`/users/${email}`).set({
         email,
         userId,
+        phoneNumber,
         createdAt: new Date().toISOString(),
         isAdmin: false,
       });
