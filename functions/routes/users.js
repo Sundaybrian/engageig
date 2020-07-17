@@ -96,7 +96,7 @@ exports.getAuthenticatedUser = (req, res) => {
       if (userDoc.exists) {
         userDetails.credentials = userDoc.data(); // populate user details
 
-        // fetch their cases
+        // fetch a user's cases
         return db
           .collection("cases")
           .where("email", "==", req.user.email)
