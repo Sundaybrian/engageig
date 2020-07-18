@@ -32,6 +32,7 @@ exports.postOneCase = (req, res) => {
     description = "not provided",
     policeStation,
     location,
+    title,
   } = req.body;
 
   const newCase = {
@@ -39,6 +40,7 @@ exports.postOneCase = (req, res) => {
     userId: req.user.user_id,
     phoneNumber: req.user.phoneNumber,
     obNumber,
+    title,
     description,
     policeStation,
     location,

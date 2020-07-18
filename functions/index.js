@@ -24,6 +24,7 @@ app.post(
       check("obNumber", "obNumber is required").not().isEmpty(),
       check("policeStation", "please provide a police station").not().isEmpty(),
       check("location", "please provide a location").not().isEmpty(),
+      check("title", "please provide a title").not().isEmpty(),
     ],
     FBAuth,
   ],
