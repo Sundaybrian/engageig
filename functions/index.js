@@ -21,9 +21,9 @@ app.post(
   "/postOneCase",
   [
     [
-      check("phoneNumber", "phoneNumber is required").not().isEmpty(),
       check("obNumber", "obNumber is required").not().isEmpty(),
       check("policeStation", "please provide a police station").not().isEmpty(),
+      check("location", "please provide a location").not().isEmpty(),
     ],
     FBAuth,
   ],
@@ -43,7 +43,7 @@ app.post(
     check("surname", "surname is required").exists(),
     check("firstName", "firstname is required").exists(),
     check("idNumber", "id number is required").exists(),
-    check("locations", "locations is required").exists(),
+    check("location", "locations is required").exists(),
   ],
   signup
 );

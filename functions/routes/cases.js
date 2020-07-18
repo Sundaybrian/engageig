@@ -28,21 +28,22 @@ exports.postOneCase = (req, res) => {
   }
 
   const {
-    phoneNumber,
     obNumber,
     description = "not provided",
     policeStation,
+    location,
   } = req.body;
 
   const newCase = {
     email: req.user.email,
     userId: req.user.user_id,
-    phoneNumber,
+    phoneNumber: req.user.phoneNumber,
     obNumber,
     description,
     policeStation,
+    location,
     createdAt: new Date().toISOString(),
-    status: "pending",
+    status: "open",
   };
 
   // persist case to db

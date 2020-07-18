@@ -59,6 +59,7 @@ exports.signup = (req, res) => {
         surname,
         middleName,
         location,
+        idNumber,
         createdAt: new Date().toISOString(),
         isAdmin: false,
       });
