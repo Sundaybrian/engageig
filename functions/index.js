@@ -40,6 +40,10 @@ app.post(
       .exists()
       .isLength({ min: 8, max: 255 }),
     check("phoneNumber", "please provide a phonenumber").exists(),
+    check("surname", "surname is required").exists(),
+    check("firstName", "firstname is required").exists(),
+    check("idNumber", "id number is required").exists(),
+    check("locations", "locations is required").exists(),
   ],
   signup
 );
