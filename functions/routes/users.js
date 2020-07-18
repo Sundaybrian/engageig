@@ -22,7 +22,16 @@ exports.signup = (req, res) => {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  const { email, password, phoneNumber } = req.body;
+  const {
+    email,
+    password,
+    phoneNumber,
+    firstName,
+    middleName = "",
+    surname,
+    idNumber,
+    location,
+  } = req.body;
 
   let userId = "";
   let token = "";
@@ -45,6 +54,11 @@ exports.signup = (req, res) => {
         email,
         userId,
         phoneNumber,
+        firstName,
+        middleName,
+        surname,
+        middleName,
+        location,
         createdAt: new Date().toISOString(),
         isAdmin: false,
       });
