@@ -9,26 +9,41 @@ const FBAuth = require("./utils/auth");
 dotenv.config();
 
 // handlers imports
-const { getAllCases, postOneCase } = require("./routes/cases");
+const { getAllCases, postOneCase, postATip } = require("./routes/cases");
 const { signup, login, getAuthenticatedUser } = require("./routes/users");
 
 //===================== cases routes=======================//
 
 // TODO:add middleware for admin only
 
-app.get("/getAllCases", getAllCases);
+app.get("/admin/getAllCases", getAllCases);
 app.post(
   "/postOneCase",
   [
     [
-      check("obNumber", "obNumber is required").not().isEmpty(),
-      check("policeStation", "please provide a police station").not().isEmpty(),
+      // check("obNumber", "obNumber is required").not().isEmpty(),
+      // check("policeStation", "please provide a police station").not().isEmpty(),
       check("location", "please provide a location").not().isEmpty(),
       check("title", "please provide a title").not().isEmpty(),
     ],
     FBAuth,
   ],
   postOneCase
+);
+
+app.post(
+  "/postATip",
+  [
+    [
+      check("area", "area is required").not().isEmpty(),
+      check("policeStation", "please provide a police station").not().isEmpty(),
+      check("location", "please provide a location").not().isEmpty(),
+      check("title", "please provide a title").not().isEmpty(),
+      check("description", "please provide a description").not().isEmpty(),
+    ],
+    FBAuth,
+  ],
+  postATip
 );
 
 //===================== signup routes =======================//

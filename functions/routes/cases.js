@@ -1,25 +1,6 @@
 const { db } = require("../utils/admin");
 const { validationResult } = require("express-validator");
 
-exports.getAllCases = (req, res) => {
-  db.collection("cases")
-    .orderBy("createdAt", "desc")
-    .get()
-    .then((data) => {
-      let cases = [];
-
-      data.forEach((doc) => {
-        cases.push({
-          id: doc.id,
-          ...doc.data(),
-        });
-      });
-
-      res.status(200).json(cases);
-    })
-    .catch((error) => res.status(500).json(error));
-};
-
 exports.postOneCase = (req, res) => {
   const errors = validationResult(req);
 
@@ -28,9 +9,9 @@ exports.postOneCase = (req, res) => {
   }
 
   const {
-    obNumber,
+    obNumber = null,
     description = "not provided",
-    policeStation,
+    policeStation = null,
     location,
     title,
   } = req.body;
@@ -53,6 +34,58 @@ exports.postOneCase = (req, res) => {
     .add(newCase)
     .then((doc) => {
       return res.status(201).json({ ...newCase, id: doc.id });
+    })
+    .catch((error) => res.status(500).json(error));
+};
+
+exports.postATip = (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { area, policeStation, location, title, description } = req.body;
+
+  const newTip = {
+    area,
+    policeStation,
+    location,
+    title,
+    description,
+    createdAt: new Date().toISOString(),
+    status: "open",
+  };
+
+  // persist tip to db
+
+  db.collection("tips")
+    .add(newTip)
+    .then((doc) => {
+      return res.status(201).json({ ...newTip, id: doc.id });
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
+};
+
+// admin functions
+
+exports.getAllCases = (req, res) => {
+  db.collection("cases")
+    .orderBy("createdAt", "desc")
+    .get()
+    .then((data) => {
+      let cases = [];
+
+      data.forEach((doc) => {
+        cases.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+
+      res.status(200).json(cases);
     })
     .catch((error) => res.status(500).json(error));
 };
