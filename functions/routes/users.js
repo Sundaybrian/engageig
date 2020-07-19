@@ -151,7 +151,6 @@ exports.signupAdmin = (req, res) => {
     middleName = "",
     surname,
     idNumber,
-    location,
   } = req.body;
 
   let userId = "";
@@ -170,7 +169,7 @@ exports.signupAdmin = (req, res) => {
     .then((_token) => {
       token = _token;
 
-      // persisting newly created user
+      // persisting newly created admin
       return db.doc(`/users/${email}`).set({
         email,
         userId,
@@ -179,14 +178,11 @@ exports.signupAdmin = (req, res) => {
         middleName,
         surname,
         middleName,
-        location,
         idNumber,
         createdAt: new Date().toISOString(),
-        isAdmin: false,
+        isAdmin: true,
       });
     })
     .then(() => res.status(201).json({ token }))
     .catch((error) => res.json({ error }));
 };
-
-exports.LoginAdmin = (req, res) => {};

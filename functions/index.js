@@ -15,7 +15,12 @@ const {
   postATip,
   updateCaseStatus,
 } = require("./routes/cases");
-const { signup, login, getAuthenticatedUser } = require("./routes/users");
+const {
+  signup,
+  login,
+  getAuthenticatedUser,
+  signupAdmin,
+} = require("./routes/users");
 
 //===================== cases routes=======================//
 
@@ -77,6 +82,22 @@ app.post(
     check("location", "locations is required").exists(),
   ],
   signup
+);
+
+// signup
+app.post(
+  "/admin/signup",
+  [
+    check("email", "enter a valid email").isEmail(),
+    check("password", "enter password with 8 or more characters")
+      .exists()
+      .isLength({ min: 8, max: 255 }),
+    check("phoneNumber", "please provide a phonenumber").exists(),
+    check("surname", "surname is required").exists(),
+    check("firstName", "firstname is required").exists(),
+    check("idNumber", "id number is required").exists(),
+  ],
+  signupAdmin
 );
 
 //login
