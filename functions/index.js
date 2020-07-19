@@ -9,7 +9,12 @@ const FBAuth = require("./utils/auth");
 dotenv.config();
 
 // handlers imports
-const { getAllCases, postOneCase, postATip } = require("./routes/cases");
+const {
+  getAllCases,
+  postOneCase,
+  postATip,
+  updateCaseStatus,
+} = require("./routes/cases");
 const { signup, login, getAuthenticatedUser } = require("./routes/users");
 
 //===================== cases routes=======================//
@@ -17,6 +22,16 @@ const { signup, login, getAuthenticatedUser } = require("./routes/users");
 // TODO:add middleware for admin only
 
 app.get("/admin/getAllCases", getAllCases);
+//TODO all middlewares for admins
+app.patch(
+  "/admin/updateCaseStatus",
+  [
+    check("id", "please provide case id").not().isEmpty(),
+    check("status", "please provide case status").not().isEmpty(),
+  ],
+  updateCaseStatus
+);
+
 app.post(
   "/postOneCase",
   [
