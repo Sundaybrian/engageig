@@ -69,7 +69,7 @@ exports.postATip = (req, res) => {
     });
 };
 
-// admin functions
+//============== admin functions =============================//
 
 exports.getAllCases = (req, res) => {
   db.collection("cases")
@@ -88,4 +88,20 @@ exports.getAllCases = (req, res) => {
       res.status(200).json(cases);
     })
     .catch((error) => res.status(500).json(error));
+};
+
+// update case status
+exports.updateCaseStatus = (req, res) => {
+  const { id, status } = req.body;
+
+  db.docs(`/cases/${id}`)
+    .update({ status })
+    .then(() => {
+      res
+        .status(200)
+        .json({ message: `case ${id} updated to status ${status}` });
+    })
+    .catch((error) => {
+      return res.status(500).json({ error });
+    });
 };
