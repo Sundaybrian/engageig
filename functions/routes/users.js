@@ -132,3 +132,61 @@ exports.getAuthenticatedUser = (req, res) => {
       return res.status(500).json({ error: "internal server error" });
     });
 };
+
+// *************************************************************************************************//
+//================================  Admins  ===================================================//
+
+exports.signupAdmin = (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  const {
+    email,
+    password,
+    phoneNumber,
+    firstName,
+    middleName = "",
+    surname,
+    idNumber,
+    location,
+  } = req.body;
+
+  let userId = "";
+  let token = "";
+
+  // create user
+
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((data) => {
+      // return promise with user data
+      userId = data.user.uid;
+      return data.user.getIdToken();
+    })
+    .then((_token) => {
+      token = _token;
+
+      // persisting newly created user
+      return db.doc(`/users/${email}`).set({
+        email,
+        userId,
+        phoneNumber,
+        firstName,
+        middleName,
+        surname,
+        middleName,
+        location,
+        idNumber,
+        createdAt: new Date().toISOString(),
+        isAdmin: false,
+      });
+    })
+    .then(() => res.status(201).json({ token }))
+    .catch((error) => res.json({ error }));
+};
+
+exports.LoginAdmin = (req, res) => {};

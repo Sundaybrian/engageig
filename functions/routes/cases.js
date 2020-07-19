@@ -99,7 +99,7 @@ exports.updateCaseStatus = (req, res) => {
 
   const { id, status } = req.body;
 
-  db.docs(`/cases/${id}`)
+  db.doc(`/cases/${id}`)
     .update({ status })
     .then(() => {
       res
