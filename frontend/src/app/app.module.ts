@@ -1,6 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 
 import { FlashMessagesModule } from "angular2-flash-messages";
 import { DataTableModule } from "angular7-data-table";
@@ -15,6 +16,7 @@ import { CaseitemComponent } from "./components/cases/caseitem/caseitem.componen
 import { LoginpageComponent } from "./pages/loginpage/loginpage.component";
 import { RegisterpageComponent } from "./pages/registerpage/registerpage.component";
 import { DashboardComponent } from "./pages/dashboard/dashboard.component";
+import { AuthService } from "./services/auth.service";
 
 @NgModule({
   declarations: [
@@ -31,11 +33,12 @@ import { DashboardComponent } from "./pages/dashboard/dashboard.component";
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     DataTableModule.forRoot(),
     AppRoutingModule,
     FlashMessagesModule.forRoot(),
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
