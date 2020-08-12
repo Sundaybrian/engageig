@@ -22,6 +22,8 @@ const {
   signupAdmin,
 } = require("./routes/users");
 
+const { uploadImage } = require("./routes/products");
+
 //===================== cases routes=======================//
 
 // TODO:add middleware for admin only
@@ -111,5 +113,8 @@ app.post(
 );
 
 app.get("/user/getAuthenticatedUser", FBAuth, getAuthenticatedUser);
+
+// ========================== products==================================//
+app.post("/products", uploadImage);
 
 exports.api = functions.region("europe-west3").https.onRequest(app);
