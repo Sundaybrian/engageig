@@ -5,8 +5,8 @@ const config = require("../utils/config");
 exports.uploadImage = (req, res) => {
   const Busboy = require("busboy");
   const path = require("path");
-  const os = require(os);
-  const fs = require(fs);
+  const os = require("os");
+  const fs = require("fs");
   const mongoose = require("mongoose");
 
   const busboy = new Busboy({ headers: req.headers });
