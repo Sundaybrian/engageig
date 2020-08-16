@@ -1,5 +1,5 @@
 const { admin } = require("../utils/admin");
-const config = require("../utils/config");
+const config = require("../utils/mongo");
 
 // upload product image
 exports.uploadImage = (req, res) => {
@@ -8,6 +8,7 @@ exports.uploadImage = (req, res) => {
   const os = require("os");
   const fs = require("fs");
   const mongoose = require("mongoose");
+  const folder = req.user.uid;
 
   const busboy = new Busboy({ headers: req.headers });
   let imageFileName;
@@ -22,7 +23,7 @@ exports.uploadImage = (req, res) => {
     const imageExtension = filename.split(".")[filename.split(".").length - 1]; // grab image extesion
     imageFileName = `${mongoose.Types.ObjectId()}.${imageExtension}`; // create a name
     const filepath = path.join(os.tmpdir(), imageFileName);
-    imageUploaded = { filepath, mimetype };
+    imageUploaded = { imageFileName, filepath, mimetype };
     file.pipe(fs.createWriteStream(filepath));
 
     // add images to the array
@@ -36,9 +37,9 @@ exports.uploadImage = (req, res) => {
     // loop to imagesToUpload
     imagesToUpload.forEach((img) => {
       // push images to the array
-      //   /o${folderwillbeuserid}%2F${imageFileName}
+
       imageUrls.push({
-        url: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`,
+        url: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o${folder}%2F${img.imageFileName}?alt=media`,
       });
 
       // create an array of promises
@@ -46,7 +47,8 @@ exports.uploadImage = (req, res) => {
         admin
           .storage()
           .bucket()
-          .upload(imageUploaded.filepath, {
+          .upload(img.filepath, {
+            destination: `${folder}/${img.imageFileName}`,
             resumable: false,
             metadata: {
               metadata: {
@@ -59,35 +61,13 @@ exports.uploadImage = (req, res) => {
 
     try {
       await Promise.all(promises);
-      res.status(200).json({ message: "Image uploaded succesfully" });
+      res
+        .status(200)
+        .json({ message: "Image uploaded succesfully", images: imagesUrls });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error });
     }
-
-    // upload image
-    //     admin
-    //       .storage()
-    //       .bucket()
-    //       .upload(imageUploaded.filepath, {
-    //         resumable: false,
-    //         metadata: {
-    //           metadata: {
-    //             contentType: imageUploaded.mimetype,
-    //           },
-    //         },
-    //       })
-    //       .then(() => {
-    //         // save the image to the user doc
-    //         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`;
-
-    //         // save to mongodb from here,by calling product endpoint
-    //       })
-    //       .then(() => {
-    //         res.json({ message: "Image uploaded succesfully" });
-    //       })
-    //       .catch((err) => res.json({ err }));
-    //   });
   });
   busboy.end(req.rawBody);
 };

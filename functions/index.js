@@ -23,6 +23,7 @@ const {
 } = require("./routes/users");
 
 const { uploadImage } = require("./routes/products");
+const mongoAuth = require("./utils/mongo");
 
 //===================== cases routes=======================//
 
@@ -115,6 +116,6 @@ app.post(
 app.get("/user/getAuthenticatedUser", FBAuth, getAuthenticatedUser);
 
 // ========================== products==================================//
-app.post("/products", uploadImage);
+app.post("/products", mongoAuth, uploadImage);
 
 exports.api = functions.region("europe-west3").https.onRequest(app);
