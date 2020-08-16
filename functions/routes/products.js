@@ -1,5 +1,4 @@
 const { admin } = require("../utils/admin");
-const config = require("../utils/mongo");
 
 // upload product image
 exports.uploadImage = (req, res) => {
@@ -39,7 +38,7 @@ exports.uploadImage = (req, res) => {
       // push images to the array
 
       imageUrls.push({
-        url: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o${folder}%2F${img.imageFileName}?alt=media`,
+        url: `https://firebasestorage.googleapis.com/v0/b/${process.env.storageBucket}/o${folder}%2F${img.imageFileName}?alt=media`,
       });
 
       // create an array of promises
@@ -66,7 +65,7 @@ exports.uploadImage = (req, res) => {
         .json({ message: "Image uploaded succesfully", images: imageUrls });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error });
+      res.status(500).json({ error: "Internal server error" });
     }
   });
   busboy.end(req.rawBody);
