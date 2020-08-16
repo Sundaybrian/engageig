@@ -38,7 +38,7 @@ exports.uploadImage = (req, res) => {
       // push images to the array
 
       imageUrls.push({
-        url: `https://firebasestorage.googleapis.com/v0/b/${process.env.storageBucket}/o/${folder}/${img.imageFileName}?alt=media`,
+        url: `https://firebasestorage.googleapis.com/v0/b/${process.env.storageBucket}/o/${img.imageFileName}?alt=media`,
       });
 
       // create an array of promises
@@ -47,7 +47,6 @@ exports.uploadImage = (req, res) => {
           .storage()
           .bucket()
           .upload(img.filepath, {
-            destination: `${folder}/${img.imageFileName}`,
             resumable: false,
             metadata: {
               metadata: {
