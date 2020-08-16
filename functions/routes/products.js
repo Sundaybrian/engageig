@@ -63,7 +63,7 @@ exports.uploadImage = (req, res) => {
       await Promise.all(promises);
       res
         .status(200)
-        .json({ message: "Image uploaded succesfully", images: imagesUrls });
+        .json({ message: "Image uploaded succesfully", images: imageUrls });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error });
