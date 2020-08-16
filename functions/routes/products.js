@@ -1,4 +1,5 @@
 const { admin } = require("../utils/admin");
+const axios = require("axios");
 
 // upload product image
 exports.uploadImage = (req, res) => {
@@ -61,13 +62,9 @@ exports.uploadImage = (req, res) => {
 
     try {
       await Promise.all(promises);
-      res
-        .status(200)
-        .json({ message: "Image uploaded succesfully", images: imageUrls });
-
       // send to mongodb
-      const url = "https://wissensof-events.herokuapp.com/api/products/";
-      const product = await axios.patch(`${url}/${productId}/upload`, {
+      const url = "https://wissensof-events.herokuapp.com/api/products";
+      const product = await axios.patch(`${url}/${productId}/upload-images`, {
         images: imageUrls,
       });
 
