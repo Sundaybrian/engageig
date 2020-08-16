@@ -7,7 +7,7 @@ exports.uploadImage = (req, res) => {
   const os = require("os");
   const fs = require("fs");
   const mongoose = require("mongoose");
-  const folder = req.user.uid;
+  const { productId } = req.params;
 
   const busboy = new Busboy({ headers: req.headers });
   let imageFileName;
@@ -20,7 +20,9 @@ exports.uploadImage = (req, res) => {
     }
 
     const imageExtension = filename.split(".")[filename.split(".").length - 1]; // grab image extesion
-    imageFileName = `${mongoose.Types.ObjectId()}.${imageExtension}`; // create a name
+    imageFileName = `${
+      req.user.uid
+    }${mongoose.Types.ObjectId()}.${imageExtension}`; // create a name
     const filepath = path.join(os.tmpdir(), imageFileName);
     imageUploaded = { imageFileName, filepath, mimetype };
     file.pipe(fs.createWriteStream(filepath));
@@ -38,7 +40,7 @@ exports.uploadImage = (req, res) => {
       // push images to the array
 
       imageUrls.push({
-        url: `https://firebasestorage.googleapis.com/v0/b/${process.env.storageBucket}/o${folder}%2F${img.imageFileName}?alt=media`,
+        url: `https://firebasestorage.googleapis.com/v0/b/${process.env.storageBucket}/o/${img.imageFileName}?alt=media`,
       });
 
       // create an array of promises
@@ -47,7 +49,6 @@ exports.uploadImage = (req, res) => {
           .storage()
           .bucket()
           .upload(img.filepath, {
-            destination: `${folder}/${img.imageFileName}`,
             resumable: false,
             metadata: {
               metadata: {
@@ -63,6 +64,15 @@ exports.uploadImage = (req, res) => {
       res
         .status(200)
         .json({ message: "Image uploaded succesfully", images: imageUrls });
+
+      // send to mongodb
+      const url = "https://wissensof-events.herokuapp.com/api/products/";
+      const product = await axios.patch(`${url}/${productId}/upload`, {
+        images: imageUrls,
+      });
+
+      // return the product
+      res.status(200).json({ product });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal server error" });

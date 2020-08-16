@@ -116,6 +116,6 @@ app.post(
 app.get("/user/getAuthenticatedUser", FBAuth, getAuthenticatedUser);
 
 // ========================== products==================================//
-app.post("/products", mongoAuth, uploadImage);
+app.patch("/products/:id/upload", mongoAuth, uploadImage);
 
 exports.api = functions.region("europe-west3").https.onRequest(app);
